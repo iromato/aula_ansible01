@@ -1,0 +1,195 @@
+ANSIBLE
+
+Link para Rodar maquinas:
+https://dply.co/
+
+Link Instalação
+http://docs.ansible.com/ansible/latest/intro_installation.html
+
+Link debian
+http://docs.ansible.com/ansible/latest/intro_installation.html#latest-releases-via-apt-debian
+
+Pegar ultima versao (2.4) CENTOS
+$ git clone https://github.com/ansible/ansible.git
+$ cd ./ansible
+$ make rpm
+$ sudo rpm -Uvh ./rpm-build/ansible-*.noarch.rpm
+
+
+Adicionar no Ubuntu o repo do ansible
+apt-add-repository ppa:ansible/ansible
+
+Instalar o Ansible
+apt-get update && apt-get install -y ansible
+
+
+CENTOS
+$ git clone https://github.com/ansible/ansible.git
+$ cd ./ansible
+$ make rpm
+$ sudo rpm -Uvh ./rpm-build/ansible-*.noarch.rpm
+
+UBUNTU
+$ sudo apt-get update
+$ sudo apt-get install software-properties-common
+$ sudo apt-add-repository ppa:ansible/ansible
+$ sudo apt-get update
+$ sudo apt-get install ansible
+
+DEBIAN
+$ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+$ sudo apt-get update
+$ sudo apt-get install ansible
+
+centos para instalar a 2.4:
+yum --enablerepo=epel-testing install ansible
+
+
+Aruqivo de configuração onde os nodes alvo devem estar descritos
+/etc/ansible/hosts
+
+Arquivo de configuração dos Ansible
+/etc/ansible/ansible.cfg
+
+-m - modules
+-k - Pedir a senha
+
+
+Testando se as maquinas respondem
+# ansible all -m ping
+
+Opção -k serve para
+# ansible all -m ping -k
+
+
+Gerar chave
+ssh-keygem
+ssh-agent-bash
+ssh-add ./.ssh/id_rsa
+ssh-add ../chave.pem
+
+Passar uma lsita de arquivos (-i de inventario de maquinas)
+#ansible -i hosts all -m ping
+
+Conectar com usuario especifico
+#ansible -i hosts all -m ping -u usuario
+
+Usando usuario e pedindo senha
+ansible -i hosts all -m ping -u ubuntu -k
+
+Executando um comando específicio em uma lista de nodes
+ansible -i hosts all -a "/sbin/ifconfig"
+
+ansible -i hosts all -s -a "bash -c 'ps -ef | grep docker'"
+
+ansible -i hosts all -m copy -a "src=/etc/hosts dest=/tmp/host-copia"
+
+ansible -i hosts all -m copy -a "src=/etc/hosts dest=/tmp/host-copia mode=0644 owner=root"
+
+Criar arquivo
+ansible -i hosts all -m file -a "dest=/tmp/host-created mode=0644 owner=root"
+
+Ver os facts
+ansible -i hosts all -m setup -a "filter=ansible_distribution"
+
+Garatinr a instalacao do cara
+ansible -i hosts all -s -m apt -a "name=vim state=present"
+
+-s = utilizar o sudo
+
+python -c 'import crypt; print crypt.crypt("GIROPOPS", "$6$randon_salt")''
+
+ansible -i  hosts  all -s -m user -a "name=godofredo password='$6$randon_saltasdihasdhauifhsdifgsdfihaofa3784y23784g2873r0cbt578034t53'"
+
+ansible -i hosts all -s -m  apt -a "name=nginx state=present"
+
+ansible  -i hosts all -s -m service -a "name=nginx state=started"
+
+ansible -i hsosts web -s -m service -a "name=sshd"
+
+Criar diretorios necessarios
+mkdir -p roles/basic/tasks
+
+------
+main.yml
+
+name: "Instalando o Apache2"
+apt: pkg=httpd state=installed
+----------
+
+Executar:
+---------------
+Raiz do projeto;
+
+playbook.yml
+---
+- hosts: web
+  become: true
+  roles:
+    - basic
+-----
+ansible-playbook -i hosts playbook.yml
+
+
+- name:  "Instalando  os pacotes necessarios para os bancos"
+  apt: pkg={{ intem }} state=installed
+  with_items:
+  -  sqlite
+  -  mysql-server
+  - galera-3
+
+
+
+  -name: "instalando pacotes web"
+  apt: pkg={{ item }} state=installed
+  with_items:
+  - nginx
+  - git
+  - php
+  - nmap
+  - ss
+
+ssh-copy-id IP
+
+
+quem for rodar o db em maquina distinta
+From Jhonatan Morais to All panelists: (10:31 AM)
+bind-address            = {{ mysql_bind_address }}
+
+
+  -----------------
+  Aula 2
+
+  mkdir wp-ansible
+  cd wp-ansible
+  mkdir roles/
+  mkdir base
+  mkdir mysql
+  mkdir wordpress
+  mkdir nginx
+  mkdir php-fpm
+
+  base
+  mkdir files
+  mkdir handlers
+  mkdir tasks
+
+  Mysql
+  mkdir handlers
+  mkdir tasks
+  mkdir templates
+
+  Nginx
+  mkdir handlers
+  mkdir tasks
+  mkdir templates
+
+  php-fpm
+  mkdir handlers
+  mkdir tasks
+  mkdir templates
+
+  wordpress
+  mkdir handlers
+  mkdir tasks
+  mkdir templates
