@@ -1,0 +1,13 @@
+- name: "Instalando os pacotes necessários"
+  yum: pkg={{ item }} state=installed
+  with_items:
+  - git
+  - nginx
+  - php
+  - nmap      
+  notify: restart nginx
+
+- name: "Criar o arquivo index.html"
+  template: src=index.html.j2 dest=/usr/share/nginx/html/index.html
+
+  notify: restart nginx

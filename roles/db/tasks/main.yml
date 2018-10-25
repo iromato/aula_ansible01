@@ -1,0 +1,7 @@
+- name: "Instalando os pacotes necessários para o banco"
+  apt: pkg={{ item }} state=installed
+  with_items:
+  - sqlite
+  - mysql-server
+  - galera-3
+  - iproute2 
